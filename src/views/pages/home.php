@@ -8,8 +8,19 @@
                 <div class="column pr-5">
 
                     <?php echo $render('feed-editor', [ 'user' => $loggedUser ]); ?>
-                    
-                    <?php echo $render('feed-item'); ?>
+
+                    <?php foreach($feed['posts'] as $feedItem): ?>
+                        <?php echo $render('feed-item', [
+                                'data' => $feedItem,
+                                'loggedUser' => $loggedUser
+                            ]); ?>
+                    <?php endforeach; ?>
+
+                    <div class="feed-pagination">
+                        <?php for($q=0; $q < $feed['pageCount']; $q++): ?>
+                            <a class=" <?php echo $feed['currentPage'] == $q ? 'active': ''; ?> " href="<?php echo $base; ?>/?page=<?php echo $q; ?>"><?php echo $q + 1; ?></a>
+                        <?php endfor; ?>
+                    </div>
 
                 </div>
                 <div class="column side pl-5">
