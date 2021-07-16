@@ -1,4 +1,4 @@
-<?php $render('header'); ?>
+<?php $render('header', [ 'loggedUser' => $loggedUser ]); ?>
 
 
 <?php $render('sidebar'); ?>
@@ -98,7 +98,7 @@
                     </div>
                     <div class="box">
                         <div class="box-body m-10">
-                            Criado com ❤️ por B7Web
+                            Criado com amor por Robero
                         </div>
                     </div>
                 </div>
