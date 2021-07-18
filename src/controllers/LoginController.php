@@ -88,6 +88,11 @@ class LoginController extends Controller {
         }
 
     }
+
+    public function logout() {
+        $_SESSION['token'] = '';
+        $this->redirect('/login');
+    }
     
 
 }
