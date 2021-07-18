@@ -113,7 +113,7 @@
                             <span>(<?php echo count($user->photos); ?>)</span>
                         </div>
                         <div class="box-header-buttons">
-                            <a href="">ver todos</a>
+                            <a href="<?php echo $base; ?>/perfil/<?php echo $user->id;?>/fotos">ver todos</a>
                         </div>
                     </div>
                     <div class="box-body row m-20">
