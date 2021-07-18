@@ -1,7 +1,8 @@
 <?php echo $render('header', [ 'loggedUser' => $loggedUser ]); ?>
 
+<section class="container main">  
 
-<?php echo $render('sidebar'); ?>
+<?php echo $render('sidebar', ['activeMenu'=>'home']); ?>
 
             
             <div class="row">

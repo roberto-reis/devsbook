@@ -1,10 +1,10 @@
 <div class="modal">
-        <div class="modal-inner">
-            <a rel="modal:close">&times;</a>
-            <div class="modal-content"></div>
-        </div>
+    <div class="modal-inner">
+        <a rel="modal:close">&times;</a>
+        <div class="modal-content"></div>
     </div>
-    <script type="text/javascript" src="assets/js/script.js"></script>
-    <script type="text/javascript" src="assets/js/vanillaModal.js"></script>
+</div>
+    <script type="text/javascript" src="<?php echo $base; ?>/assets/js/script.js"></script>
+    <script type="text/javascript" src="<?php echo $base; ?>/assets/js/vanillaModal.js"></script>
 </body>
 </html>
