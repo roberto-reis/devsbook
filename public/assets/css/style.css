@@ -428,6 +428,37 @@ form .button:hover {
     background-color:#477dbb;
 }
 
+.form-config {
+    margin-left: 10px;
+}
+.form-config form{
+    padding-top: 15px;
+}
+.form-config label,
+.form-config input {
+    display: block;
+    font-size: 16px;
+    color: #333;
+}
+
+.form-config input {
+    width: 100%;
+    max-width: 380px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    
+}
+
+.flash {
+    padding: 10px 15px;
+    margin-bottom: 12px;
+    border: 2px solid #f5c2c7;
+    border-radius: 4px;
+    background-color: #f8d7da;
+    color: #842029;
+}
+
 @media (max-width: 992px) {
     header .head-side-right {
         display:none !important;

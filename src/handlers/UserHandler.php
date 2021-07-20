@@ -19,6 +19,7 @@ class UserHandler {
                 $loggedUser = new User();
                 $loggedUser->id = $data['id'];
                 $loggedUser->name = $data['name'];
+                $loggedUser->email = $data['email'];
                 $loggedUser->avatar = $data['avatar'];
 
                 return $loggedUser;
@@ -66,6 +67,7 @@ class UserHandler {
             $user = new User();
             $user->id = $data['id'];
             $user->name = $data['name'];
+            $user->email = $data['email'];
             $user->birthdate = $data['birthdate'];
             $user->city = $data['city'];
             $user->work = $data['work'];
@@ -125,6 +127,20 @@ class UserHandler {
        ])->execute();
 
        return $token;
+    }
+
+    public static function updateUser($fields, $loggedUserId) {
+        if(count($fields) > 0) {
+            $update = User::update();
+
+            foreach($fields as $fieldName => $fieldValue) {
+                if($fieldName == 'password') {
+                    $fieldValue = password_hash($fieldValue, PASSWORD_DEFAULT);
+                }
+                $update->set($fieldName, $fieldValue);
+            }
+            $update->where('id', $loggedUserId)->execute();
+        }
     }
 
     public static function isFollowing($from, $to) {

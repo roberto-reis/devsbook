@@ -17,12 +17,12 @@ $router->get('/perfil/{id}/follow', 'ProfileController@follow');
 $router->get('/perfil/{id}', 'ProfileController@index');
 $router->get('/perfil', 'ProfileController@index');
 
+$router->get('/config', 'ConfigController@index');
+$router->post('/config', 'ConfigController@save');
+
 $router->get('/amigos', 'ProfileController@friends');
 $router->get('/fotos', 'ProfileController@photos');
 
 $router->get('/pesquisa', 'SearchController@index');
 
 $router->get('/sair', 'LoginController@logout');
-
-
-// $router->get('/config');
