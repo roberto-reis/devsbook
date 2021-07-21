@@ -3,6 +3,7 @@
 namespace src\handlers;
 
 use \src\models\Post;
+use \src\models\PostLike;
 use \src\models\User;
 use \src\models\UserRelation;
 
@@ -21,7 +22,7 @@ class PostHandler {
         }
     }
 
-    public static function _postListToObject($postList, $loggedUser) {
+    public static function _postListToObject($postList, $loggedUserId) {
         $posts = [];
         foreach($postList as $postItem) {
             $newPost = new Post();
@@ -31,7 +32,7 @@ class PostHandler {
             $newPost->body = $postItem['body'];
             $newPost->mine = false;
 
-            if($postItem['id_user'] == $loggedUser) {
+            if($postItem['id_user'] == $loggedUserId) {
                 $newPost->mine = true;
             }
 
@@ -43,8 +44,10 @@ class PostHandler {
             $newPost->user->avatar = $newUser['avatar'];
 
             // Preencher informações de LIKE
-            $newPost->likeCount = 0;
-            $newPost->liked = true;
+            $likes = PostLike::select()->where('id_post', $postItem['id'])->get();
+
+            $newPost->likeCount = count($likes);
+            $newPost->liked = self::isLiked($postItem['id'], $loggedUserId);
 
             // Preencher informações de COMMENTES
             $newPost->comments = [];
@@ -54,8 +57,34 @@ class PostHandler {
         return $posts;
     }
 
+    public static function isLiked($id, $loggedUserId) {
+        $myLike = PostLike::select()
+            ->where('id_post', $id)
+            ->where('id_user', $loggedUserId)
+        ->get();
+
+        if( count($myLike)> 0 ) {
+            return true;
+        }
+    }
+
+    public static function deleteLike($id, $loggedUserId) {
+        PostLike::delete()
+            ->where('id_post', $id)
+            ->where('id_user', $loggedUserId)
+        ->execute();
+    }
+
+    public static function addLike($id, $loggedUserId) {
+        PostLike::insert([
+            'id_post' => $id,
+            'id_user' => $loggedUserId,
+            'created_at' => date('Y-m-d H:i:s')
+        ])->execute();
+    }
+
     public static function getUserFeed($idUser, $page, $loggedUserId) {
-        $perPage = 2;
+        $perPage = 10;
 
         $postList = Post::select()
             ->where('id_user', $idUser)
@@ -80,7 +109,7 @@ class PostHandler {
     }
 
     public static function getHomeFeed($idUser, $page) {
-        $perPage = 2;
+        $perPage = 10;
 
         // Pegar lista de usuários que eu sigo.
         $userList = UserRelation::select()->where('user_from', $idUser)->get();

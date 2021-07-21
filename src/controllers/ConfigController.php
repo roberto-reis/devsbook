@@ -1,6 +1,7 @@
 <?php
 namespace src\controllers;
 
+use ClanCats\Hydrahon\Query\Sql\Update;
 use \core\Controller;
 use DateTime;
 use \src\handlers\UserHandler;
@@ -85,8 +86,30 @@ class ConfigController extends Controller {
             $updateFields['city'] = $city;
             $updateFields['work'] = $work;
 
-            UserHandler::updateUser($updateFields, $this->loggedUser->id);
+            // Avatar
+            if(isset($_FILES['avatar']) && !empty($_FILES['avatar']['tmp_name']) ) {
+                $newAvatar = $_FILES['avatar'];
 
+                if( in_array($newAvatar['type'], ['image/jpeg', 'image/jpg', 'image/png']) ) {
+                    $avatarName = $this->cutImage($newAvatar, 200, 200, 'media/avatars');
+                    $updateFields['avatar'] = $avatarName;
+                    echo $avatarName;
+                    exit;
+                }
+            }
+
+            //Cover
+            if(isset($_FILES['cover']) && !empty($_FILES['cover']['tmp_name']) ) {
+                $newCover = $_FILES['cover'];
+
+                if( in_array($newCover['type'], ['image/jpeg', 'image/jpg', 'image/png']) ) {
+                    $coverName = $this->cutImage($newCover, 850, 310, 'media/covers');
+                    $updateFields['cover'] = $coverName;
+                }
+            }
+
+
+            UserHandler::updateUser($updateFields, $this->loggedUser->id);
             $this->redirect('/config');
 
 
@@ -95,6 +118,51 @@ class ConfigController extends Controller {
             $this->redirect('/config');
         }
 
+
+    }
+
+
+    private function cutImage($file, $w, $h, $folder) {
+        list($widthOrig, $heightOrig) = getimagesize($file['tmp_name']);
+        $ratio = $widthOrig / $heightOrig;
+
+        $newWidth = $w;
+        $newHeigth = $newWidth / $ratio;
+
+        if($newHeigth < $h) {
+            $newHeigth = $h;
+            $newWidth = $newHeigth * $ratio;
+        }
+
+        $x = $w - $newWidth;
+        $y = $h - $newHeigth;
+
+        $x = ($x < 0) ? $x / 2 : $x ;
+        $y = ($y < 0) ? $y / 2 : $y ;
+
+        $finalImage = imagecreatetruecolor($w, $h);
+
+        switch($file['type']) {
+            case 'image/jpeg':
+            case 'image/jpg':
+                $image = imagecreatefromjpeg($file['tmp_name']);
+                break;
+            case 'image/png':
+                $image = imagecreatefrompng($file['tmp_name']);
+                break;
+        }
+
+        imagecopyresampled(
+            $finalImage, $image,
+            $x, $y, 0, 0,
+            $newWidth, $newHeigth, $widthOrig, $heightOrig
+        );
+
+        $fileName = md5(time().rand(0, 9999)).'.jpg';
+
+        imagejpeg($finalImage, $folder.'/'.$fileName);
+
+        return $fileName;
 
     }
 

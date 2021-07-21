@@ -26,3 +26,5 @@ $router->get('/fotos', 'ProfileController@photos');
 $router->get('/pesquisa', 'SearchController@index');
 
 $router->get('/sair', 'LoginController@logout');
+
+$router->get('/ajax/like/{id}', 'AjaxController@like');

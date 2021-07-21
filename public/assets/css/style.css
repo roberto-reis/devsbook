@@ -450,6 +450,10 @@ form .button:hover {
     
 }
 
+.form-config .image-edit {
+    max-width: 150px;
+}
+
 .flash {
     padding: 10px 15px;
     margin-bottom: 12px;
